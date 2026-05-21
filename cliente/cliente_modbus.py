@@ -1,12 +1,4 @@
-try:
-    # pymodbus v3+: client is in pymodbus.client.sync
-    from pymodbus.client import ModbusTcpClient
-except Exception:
-    try:
-        from pymodbus.client.sync import ModbusTcpClient
-    except Exception:
-        # fallback: let import error propagate for clearer message
-        from pymodbus.client import ModbusTcpClient
+from pymodbus.client import ModbusTcpClient
 from time import sleep
 import struct
 
@@ -25,7 +17,6 @@ class ClienteMODBUS():
     def lerDado(self, tipo, addr):
         """
         Método para leitura de um dado da Tabela MODBUS
-        Retorna o valor lido ou None em caso de falha.
         """
         # Holding Register (função 03)
         if tipo == 1:
@@ -61,7 +52,6 @@ class ClienteMODBUS():
     def escreveDado(self, tipo, addr, valor):
         """
         Método para a escrita de dados na Tabela MODBUS
-        Retorna True em caso de sucesso, False em caso de falha.
         """
         # Holding Register (função 06 - single)
         if tipo == 1:
@@ -76,6 +66,7 @@ class ClienteMODBUS():
 
         # Tipo inválido
         return False
+    
     def escreveFloat(self, addr, valor):
 
         """
