@@ -1,12 +1,24 @@
 from cliente_modbus import ClienteMODBUS
 from time import sleep
 
-def atendimento(self):
+
+class InterfaceUsuario():
+    """
+    Classe responsável pela interação com o usuário
+    """
+
+    def __init__(self, server_ip, porta):
+        """
+        Construtor
+        """
+        self._cliente = ClienteMODBUS(server_ip, porta)
+
+    def atendimento(self):
         """
         Método para atendimento do usuário
         """
         # Abre a conexão com o servidor MODBUS
-        self._cliente.connect()
+        self._cliente.conecta()
         try:
             atendimento = True
             while atendimento:
@@ -17,19 +29,19 @@ def atendimento(self):
                     addr = input("Digite o endereço da tabela MODBUS: ")
                     nvezes = input("Digite o número de vezes que deseja ler: ")
                     for i in range(0, int(nvezes)):
-                        print(f"Leitura {i+1}: {self.lerDado(int(tipo), int(addr))}")
-                        sleep(self._scan_time)
+                        print(f"Leitura {i+1}: {self._cliente.lerDado(int(tipo), int(addr))}")
+                        sleep(self._cliente._scan_time)
 
                 elif sel == '2':
                     tipo = input("""Qual tipo de dado deseja escrever? (1- Holding Register | 2- Coil): """)
                     addr = input("Digite o endereço da tabela MODBUS: ")
                     valor = input("Digite o valor que deseja escrever: ")
-                    ok = self.escreveDado(int(tipo), int(addr), int(valor))
+                    ok = self._cliente.escreveDado(int(tipo), int(addr), int(valor))
                     print("Escrita realizada." if ok else "Falha na escrita.")
 
                 elif sel == '3':
                     scant = input("Digite o tempo de varredura desejado [s]: ")
-                    self._scan_time = float(scant)
+                    self._cliente._scan_time = float(scant)
 
                 elif sel == '4':
                     atendimento = False
